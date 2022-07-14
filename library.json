@@ -1,8 +1,14 @@
 {
+	"2": {
+		"block_w": 310,
+		"block_h": 121,
+		"box_size": 4,
+		"text_size": 30
+	},
     "3": {
-		"box_size": 8,
 		"block_w": 252,
 		"block_h": 328,
-		"text_size": 28
+		"box_size": 8,
+		"text_size": 26
 	}
 }
