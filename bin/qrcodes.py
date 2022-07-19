@@ -14,3 +14,4 @@ else:
     count = args.count
 
 create_qr_code(type_qr, color, input_file, mode_a4, count)
+# standart черный C:/Users/User/Desktop/qr_test_input.json 4 5

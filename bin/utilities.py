@@ -55,7 +55,8 @@ def size_selection(count, mode_a4, block_w, block_h):
             if m == 0:
                 print('\n*Невозможно расположить заданное количество qr-кодов такого размера на листе А4!*\n')
         else:
-            m = 1
+            m = n
+            n = 1
     else:
         n = count[0]
         m = count[1]
@@ -74,7 +75,7 @@ def size_selection(count, mode_a4, block_w, block_h):
                     print('\n*Количество qr-кодов выходит за рамки листа А4! Рекомендуется сгенерировать ', n, 'x', m, ' qr-кодов текущего размера!*\n')
                     m = 0
 
-    return n, m
+    return m, n
 
 
 def create_background_a4():

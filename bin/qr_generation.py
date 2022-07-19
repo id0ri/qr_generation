@@ -34,8 +34,8 @@ def create_qr_code(type_qr, color, input_file, mode_a4, count):
         inserting_qr_x = 0
         inserting_qr_y = 0
 
-        for i in range(n):
-            for j in range(m):
+        for i in range(m):
+            for j in range(n):
                 qr = qrcode.QRCode(
                     version=size,
                     error_correction=qrcode.constants.ERROR_CORRECT_Q,
