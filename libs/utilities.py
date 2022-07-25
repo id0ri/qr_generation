@@ -2,7 +2,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 PEN_W = 1
 
-TEXT_FONT = '../fonts/roboto_flex.ttf'
+TEXT_FONT = '../data/roboto_flex.ttf'
 
 PEN_COLOR = (194, 194, 194)
 TEXT_COLOR = (0, 0, 0)
@@ -40,6 +40,10 @@ def draw_field(block_w, block_h):
     draw.line((block_w - PEN_W, 0, block_w - PEN_W, block_h), fill=PEN_COLOR, width=PEN_W)
     draw.line((block_w, block_h - PEN_W, 0, block_h - PEN_W), fill=PEN_COLOR, width=PEN_W)
     return block
+
+
+def get_width_in_pixel(size, box_size):
+    return (17 + size * 4) * box_size
 
 
 def size_selection(count, mode_a4, block_w, block_h):

@@ -1,14 +1,15 @@
 import qrcode
 import json
+import os
 from block_generation import Blocks
 from utilities import *
 
 
-def create_qr_code(type_qr, color, input_file, mode_a4, count):
+def create_qr_code(type_qr, color, input_file, mode_a4, count, output_file):
     with open(input_file, 'r') as json_file:
         link_file = json.load(json_file)
 
-    with open('../files/library.json', 'r') as library:
+    with open('../data/parameters.json', 'r') as library:
         library = json.load(library)
 
     size = correlate_size(type_qr)
@@ -47,7 +48,7 @@ def create_qr_code(type_qr, color, input_file, mode_a4, count):
                 position_link = position_link + 1
 
                 image_qr = qr.make_image(fill_color=color, back_color=QR_BACKGROUND)
-                block = block_type.class_selection(size, dept, text, image_qr)
+                block = block_type.create_block(size, dept, text, image_qr)
                 image_background.paste(block, (inserting_qr_x, inserting_qr_y))
 
                 inserting_qr_x += block_w
@@ -55,5 +56,7 @@ def create_qr_code(type_qr, color, input_file, mode_a4, count):
             inserting_qr_x = 0
             inserting_qr_y += block_h - PEN_W
 
-        image_background.save('../images/qr_list.png')
+        if not os.path.isdir(output_file):
+            os.mkdir(output_file)
+        image_background.save(output_file + '/qr_list.png')
         image_background.show()
