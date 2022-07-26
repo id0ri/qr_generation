@@ -1,8 +1,11 @@
 from PIL import Image, ImageDraw, ImageFont
+from typing import Union
 
 
 PEN_W = 1
 SIZE_COUNT = 4
+
+QR_CAPASITY = [11, 20, 32, 46, 60, 74, 86, 108, 130]
 
 TEXT_FONT = '../data/roboto_flex.ttf'
 
@@ -14,17 +17,7 @@ COLOR_BACKGROUND = (255, 255, 255)
 SIZE_A4 = (2480, 3508)
 
 
-def correlate_size(type_qr):
-    switcher = {
-        'micro': 1,
-        'small': 2,
-        'standard': 3,
-        'wide': 4,
-    }
-    return switcher.get(type_qr, 3)
-
-
-def correlate_color(color):
+def correlate_color(color: str) -> str:
     switcher = {
         'черный': 'black',
         'красный': 'red',
@@ -34,7 +27,7 @@ def correlate_color(color):
     return switcher.get(color, 'black')
 
 
-def draw_field(block_w, block_h):
+def draw_field(block_w: int, block_h: int) -> Image:
     block = Image.new(mode="RGB", size=(block_w, block_h), color=COLOR_BACKGROUND)
 
     draw = ImageDraw.Draw(block)
@@ -44,11 +37,11 @@ def draw_field(block_w, block_h):
     return block
 
 
-def get_width_in_pixel(size, box_size):
+def get_width_in_pixel(size: int, box_size: int) -> int:
     return (17 + size * 4) * box_size
 
 
-def size_selection(count, mode_a4, block_w, block_h):
+def size_selection(count: Union[int, list], mode_a4: bool, block_w: int, block_h: int) -> tuple[int, int]:
     if type(count) == int:
         quantity_column = count
         if mode_a4:
@@ -84,9 +77,9 @@ def size_selection(count, mode_a4, block_w, block_h):
     return quantity_lines, quantity_column
 
 
-def create_background_a4():
+def create_background_a4() -> Image:
     return Image.new(mode="RGB", size=SIZE_A4, color=COLOR_BACKGROUND)
 
 
-def create_background_by_size(block_w, block_h, n, m):
+def create_background_by_size(block_w, block_h, n, m) -> Image:
     return Image.new(mode="RGB", size=(block_w * n, (block_h - PEN_W) * m), color=COLOR_BACKGROUND)

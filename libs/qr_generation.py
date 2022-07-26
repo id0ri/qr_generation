@@ -6,44 +6,56 @@ from block_generation import Blocks
 from utilities import *
 
 
-def check_size(link_file, library, size):
-    max_len = 0
+def check_size(link_file: str, library: str, type_qr: str) -> int:
+    max_link_len = 0
     for i in range(len(link_file['data'])):
-        if len(link_file['data'][i]['link']) > max_len:
-            max_len = len(link_file['data'][i]['link'])
-    if max_len <= library[str(size)]['max_len']:
-        return size
+        if len(link_file['data'][i]['link']) > max_link_len:
+            max_link_len = len(link_file['data'][i]['link'])
+    if max_link_len > library[type_qr]['max_len']:
+        return -1
+    elif max_link_len <= library[type_qr]['normal_len']:
+        return library[type_qr]['size']
     else:
-        real_size = 0
-        for i in range(1, SIZE_COUNT):
-            if max_len > library[str(i)]['max_len'] and max_len <= library[str(i + 1)]['max_len']:
-                real_size = i + 1
-        if real_size == 0:
-            real_size = SIZE_COUNT + 1
-        return real_size
+        counter = 0
+        while max_link_len > QR_CAPASITY[counter]:
+            counter += 1
+        counter += 1
+        return counter
 
-def create_qr_code(type_qr, color, input_file, mode_a4, count, output_file):
-    with open(input_file, 'r') as json_file:
-        link_file = json.load(json_file)
 
-    with open('../data/parameters.json', 'r') as library:
-        library = json.load(library)
-    size = correlate_size(type_qr)
-    box_size = library[str(size)]['box_size']
-    block_w = library[str(size)]['block_w']
-    block_h = library[str(size)]['block_h']
+def create_qr_code(type_qr: str, color: str, input_file: str, mode_a4: bool, count: Union[int, list], output_file: str) -> None:
+    try:
+        with open(input_file, 'r') as json_file:
+            link_file = json.load(json_file)
+    except:
+        print('*Не удалось открыть данный json файл с ссылками!*')
+        sys.exit()
+
+    try:
+        with open('../data/parameters.json', 'r') as library:
+            library = json.load(library)
+    except:
+        print('*Не удалось открыть данный json файл с параметрами!*')
+        sys.exit()
+
+    size = library[type_qr]['size']
+    box_size = library[type_qr]['box_size']
+    block_w = library[type_qr]['block_w']
+    block_h = library[type_qr]['block_h']
 
     qr_width = get_width_in_pixel(size, box_size)
-    real_size = check_size(link_file, library, size)
-    print(real_size)
-    if real_size > size:
+    real_size = check_size(link_file, library, type_qr)
+    if real_size < 0:
+        print('*Данный тип qr-кода не может вместить ссылки такой длины!*')
+        sys.exit()
+    elif real_size > size:
         qr_width = get_width_in_pixel(real_size, box_size)
         if block_w < block_h:
             block_w = qr_width + 20
-            block_h += (qr_width - get_width_in_pixel(size, box_size))
+            block_h += (qr_width - get_width_in_pixel(size - 1, box_size))
         else:
             block_h = qr_width + 20
-            block_w += (qr_width - get_width_in_pixel(size, box_size))
+            block_w += (qr_width - get_width_in_pixel(size - 1, box_size))
 
     n, m = size_selection(count, mode_a4, block_w, block_h)
 
@@ -56,7 +68,7 @@ def create_qr_code(type_qr, color, input_file, mode_a4, count, output_file):
         image_background = create_background_by_size(block_w, block_h, n, m)
 
     color = correlate_color(color)
-    text_size = library[str(size)]['text_size']
+    text_size = library[type_qr]['text_size']
     dept = link_file['dept']
 
     block_type = Blocks(block_w, block_h, box_size, text_size)
@@ -68,7 +80,7 @@ def create_qr_code(type_qr, color, input_file, mode_a4, count, output_file):
     for i in range(m):
         for j in range(n):
             qr = qrcode.QRCode(
-                version=real_size,
+                version=size,
                 error_correction=qrcode.constants.ERROR_CORRECT_Q,
                 box_size=box_size,
                 border=0,
@@ -86,7 +98,7 @@ def create_qr_code(type_qr, color, input_file, mode_a4, count, output_file):
         inserting_qr_x = 0
         inserting_qr_y += block_h - PEN_W
 
+    output_file += 'results/'
     if not os.path.isdir(output_file):
         os.mkdir(output_file)
-    image_background.save(output_file + 'results/qr_list.png')
-    image_background.show()
+    image_background.save(output_file + 'qr_list.png')
