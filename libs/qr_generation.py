@@ -43,11 +43,14 @@ def create_qr_code(type_qr, color, input_file, mode_a4, count, output_file):
                     box_size=box_size,
                     border=0,
                 )
+
                 qr.add_data(link_file['data'][position_link]['link'])
                 text = link_file['data'][position_link]['text']
                 position_link = position_link + 1
 
                 image_qr = qr.make_image(fill_color=color, back_color=QR_BACKGROUND)
+                if i == 0 and j == 0:
+                    print(image_qr.size)
                 block = block_type.create_block(size, dept, text, image_qr)
                 image_background.paste(block, (inserting_qr_x, inserting_qr_y))
 
