@@ -80,7 +80,7 @@ def create_qr_code(type_qr: str, color: str, input_file: str, mode_a4: bool, cou
     for i in range(m):
         for j in range(n):
             qr = qrcode.QRCode(
-                version=size,
+                version=real_size,
                 error_correction=qrcode.constants.ERROR_CORRECT_Q,
                 box_size=box_size,
                 border=0,
