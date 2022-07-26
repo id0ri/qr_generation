@@ -8,10 +8,8 @@ class Blocks:
         self.box_size = box_size
         self.text_size = text_size
 
-    def create_block(self, size, dept, text, image_qr):
+    def create_block(self, size, dept, text, image_qr, qr_width):
         block = draw_field(self.block_w, self.block_h)
-
-        qr_width = get_width_in_pixel(size, self.box_size)
 
         if size == 3:
             border = (self.block_w - qr_width) // 2

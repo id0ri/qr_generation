@@ -3,24 +3,28 @@
 		"block_w": 260,
 		"block_h": 100,
 		"box_size": 4,
-		"text_size": 30
+		"text_size": 30,
+		"max_len": 11
 	},
 	"2": {
 		"block_w": 310,
 		"block_h": 121,
 		"box_size": 4,
-		"text_size": 35
+		"text_size": 35,
+		"max_len": 20
 	},
     "3": {
 		"block_w": 252,
 		"block_h": 328,
 		"box_size": 8,
-		"text_size": 38
+		"text_size": 38,
+		"max_len": 32
 	},
 	"4": {
 		"block_w": 680,
 		"block_h": 150,
 		"box_size": 4,
-		"text_size": 50
+		"text_size": 50,
+		"max_len": 46
 	}
 }

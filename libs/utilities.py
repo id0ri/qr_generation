@@ -1,6 +1,8 @@
 from PIL import Image, ImageDraw, ImageFont
 
+
 PEN_W = 1
+SIZE_COUNT = 4
 
 TEXT_FONT = '../data/roboto_flex.ttf'
 
@@ -48,38 +50,38 @@ def get_width_in_pixel(size, box_size):
 
 def size_selection(count, mode_a4, block_w, block_h):
     if type(count) == int:
-        n = count
+        quantity_column = count
         if mode_a4:
-            m = 0
-            for i in range(1, n):
-                if n % i == 0 and block_w * (n // i) <= SIZE_A4[0] and (block_h - PEN_W) * i <= SIZE_A4[1]:
-                    m = n // i
-                    n = i
+            quantity_lines = 0
+            for i in range(1, quantity_column):
+                if quantity_column % i == 0 and block_w * (quantity_column // i) <= SIZE_A4[0] and (block_h - PEN_W) * i <= SIZE_A4[1]:
+                    quantity_lines = quantity_column // i
+                    quantity_column = i
                     break
-            if m == 0:
+            if quantity_lines == 0:
                 print('\n*Невозможно расположить заданное количество qr-кодов такого размера на листе А4!*\n')
         else:
-            m = n
-            n = 1
+            quantity_lines = quantity_column
+            quantity_column = 1
     else:
-        n = count[0]
-        m = count[1]
+        quantity_column = count[0]
+        quantity_lines = count[1]
         if mode_a4:
-            if block_w * n > SIZE_A4[0] or (block_h - PEN_W) * m > SIZE_A4[1]:
-                n *= m
-                m = 0
-                for i in range(1, n):
-                    if n % i == 0 and block_w * (n // i) <= SIZE_A4[1] and (block_h - PEN_W) * i <= SIZE_A4[0]:
-                        m = n // i
-                        n = i
+            if block_w * quantity_column > SIZE_A4[0] or (block_h - PEN_W) * quantity_lines > SIZE_A4[1]:
+                quantity_column *= quantity_lines
+                quantity_lines = 0
+                for i in range(1, quantity_column):
+                    if quantity_column % i == 0 and block_w * (quantity_column // i) <= SIZE_A4[1] and (block_h - PEN_W) * i <= SIZE_A4[0]:
+                        quantity_lines = quantity_column // i
+                        quantity_column = i
                         break
-                if m == 0:
+                if quantity_lines == 0:
                     print('\n*Невозможно расположить заданное количество qr-кодов такого размера на листе А4!*\n')
                 else:
-                    print('\n*Количество qr-кодов выходит за рамки листа А4! Рекомендуется сгенерировать ', n, 'x', m, ' qr-кодов текущего размера!*\n')
-                    m = 0
+                    print('\n*Количество qr-кодов выходит за рамки листа А4! Рекомендуется сгенерировать ', quantity_column, 'x', quantity_lines, ' qr-кодов текущего размера!*\n')
+                    quantity_lines = 0
 
-    return m, n
+    return quantity_lines, quantity_column
 
 
 def create_background_a4():
