@@ -25,7 +25,7 @@ def check_size(link_file: str, library: str, type_qr: str) -> int:
 
 def create_qr_code(type_qr: str, color: str, input_file: str, mode_a4: bool, count: Union[int, list], output_file: str) -> None:
     try:
-        with open(input_file, 'r') as json_file:
+        with open(input_file, 'r', encoding='utf-8') as json_file:
             link_file = json.load(json_file)
     except:
         print('*Не удалось открыть данный json файл с ссылками!*')
